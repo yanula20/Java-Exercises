@@ -1,0 +1,46 @@
+import java.util.*;
+import java.util.Arrays;
+
+public class MaxMinAvgElementOfArray{
+  public static void main(String[] args){
+    int max = 0;
+    int min = 0;
+    
+    Random rand = new Random();
+    int arrayLength = rand.nextInt(10)+1;//+1 ensures that 0 is not selected; outofbounds 
+    int[] arr = new int[arrayLength];
+    System.out.println("The random array length is: " + arrayLength);
+    for(int i = 0; i < arr.length; i++){
+      arr[i] = rand.nextInt(100);
+    }//end for loop
+    
+      max = arr[0];
+      min = arr[0];
+      double avg;
+      int sum = 0;
+    for(int j = 0; j < arr.length; j++){
+      if(arr[j] > max){
+        max = arr[j] ;
+      }else{
+        max = max;
+      }
+      
+     if(arr[j] < min){
+        min = arr[j];
+      }else{
+        min = min;
+      } 
+      
+      sum = sum + arr[j];
+      
+    }//end for loop
+    
+    avg = (double)sum/arr.length;
+    
+    System.out.println(Arrays.toString(arr));
+    System.out.println("The max element of the array is: " + max);
+    System.out.println("The min element of the array is: " + min);
+    System.out.println("The average of the arrays is: " + avg);
+    
+  }//end main
+}//end program

@@ -1,0 +1,32 @@
+import java.util.*;
+
+public class ScannerLookAhead{
+  Scanner console = new Scanner(System.in);
+  public static void main(String[] args){
+    getInt(console, "Please enter an integer");
+    getDouble(console, "Please enter an double");
+  }
+  
+  public static void getInt(Scanner console, String str){
+    System.out.print(str);
+    while(!console.hasNextInt()){
+      String trash = console.next(); //flush buffer
+      System.out.println("You did not enter an int: " + trash);
+      System.out.print(str);
+    }
+    int keeper = console.nextInt();
+    System.out.println("Good job. You entered int: " + keeper);
+  }
+  
+  public static void getDouble(Scanner console, String str){
+    System.out.print(str);
+    while(!console.hasNextDouble()){
+      String trash = console.next(); //flush buffer
+      System.out.println("You did not enter a double: " + trash);
+      System.out.print(str);
+    }
+    
+    double keeper = console.nextDouble();
+    System.out.println("Good job. You entered double: " + keeper);
+  }
+}

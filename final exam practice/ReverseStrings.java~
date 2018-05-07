@@ -1,0 +1,18 @@
+import java.util.*;
+import java.util.Arrays;
+
+public class ReverseStrings{
+  public static final Scanner console = new Scanner(System.in);
+  public static void main(String[] args){
+    System.out.print("Enter a string to be reversed: ");
+    String str = console.next();
+    
+    String temp = " ";
+    System.out.println(str);
+    for(int i = str.length(); i >= 0; string.length()--){
+      temp = temp + str.charAt(str.length());
+    }
+  }//end while
+  System.out.println("Your string is: " + temp);
+}
+}

@@ -1,0 +1,16 @@
+import java.util.*;
+
+public class SentinelLoop1 {
+  public static void main(String[] args){
+    Scanner console = new Scanner(System.in);
+    int sum = 0;
+    System.out.print("Enter first integer (-999 to quit): ");
+    int value = console.nextInt( );
+    while (value != -999) {
+      sum = sum + value;
+      System.out.print("Enter next integer (-999 to quit): ");
+      value = console.nextInt( );
+    }
+    System.out.print("The sum is " + sum);
+  }
+}

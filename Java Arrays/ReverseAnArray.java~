@@ -1,0 +1,10 @@
+import java.util.*;
+import java.util.Arrays;
+
+public class ReverseAnArray{
+  Scanner in = new Scanner(System.in);
+  public static void main(String[] args){
+    
+ 
+}
+}

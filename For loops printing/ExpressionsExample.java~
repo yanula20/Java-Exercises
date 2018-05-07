@@ -1,0 +1,10 @@
+public class ExpressionsExample {
+  public static void main(String[] args) {
+  //4
+  System.out.println(2 + 2);
+  //8
+  System.out.println(2 + 2 * 3);
+  
+  System.out.println(10.0 / 2);
+  }
+}

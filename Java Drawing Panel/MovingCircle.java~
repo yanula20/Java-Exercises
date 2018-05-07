@@ -1,0 +1,50 @@
+import java.awt.*;
+
+public class MovingCircle {
+    public static void main(String[] args) {
+        DrawingPanel panel = new DrawingPanel(300, 300);
+        Graphics g = panel.getGraphics( );
+        drawCircles(panel, g);
+    }
+    
+    public static void drawCircles(DrawingPanel panel, Graphics g) {
+        g.setColor(Color.RED); 
+        for (int i = 0; i < 10; i++) {
+            panel.sleep(500);
+            g.fillOval(0 + 30 * i, 270 - 30 * i, 30, 30);
+        }
+    }
+}
+
+Show Moving Circles Execution 
+
+There are two problems with this animation.  The first is that the previous circle needs to be erased before the next circle is drawn.  The second is that the circle needs to be drawn more often for the animation to be smooth. 
+
+To address the second problem, one solution is to draw the circle more often, perhaps every 3 pixels instead of every 30 pixels (using 3 * i instead of 30 * i).  To get the last circle at position (270,0), the loop variable i needs to go up to 90.  To have same rate of speed, the amount of sleep needs to be changed to 50 ms.  Make and test these changes in the MovingCircle program.  You should see a solid red diagonal line being drawn. 
+
+To address the first problem, we need to consider how to erase the previous circle and when.  Assuming the background color is white, drawing a white circle with the same parameter values that were used to draw the red circle should "erase" the red circle.  If the next red circle is drawn immediately after erasing the previous one, then a blank window is unlikely to appear during the animation.  Note though that we will need to switch colors in the loop between white and red.  With all these considerations, our pseudocode in the loop is: 
+Sleep for 50 ms.
+Change the color to white.
+Fill the previous circle.
+Change the color to red.
+Fill the next circle.
+This leads to the following program.  Note that we get the previous circle by using i - 1
+import java.awt.*;
+
+public class MovingCircle {
+    public static void main(String[] args) {
+        DrawingPanel panel = new DrawingPanel(300, 300);
+        Graphics g = panel.getGraphics( );
+        drawCircles(panel, g);
+    }
+    
+    public static void drawCircles(DrawingPanel panel, Graphics g) {
+        for (int i = 0; i <= 90; i++) {
+            panel.sleep(50);
+            g.setColor(Color.WHITE); 
+            g.fillOval(0 + 3 * (i - 1), 270 - 3 * (i - 1), 30, 30);
+            g.setColor(Color.RED); 
+            g.fillOval(0 + 3 * i, 270 - 3 * i, 30, 30);
+        }
+    }
+}

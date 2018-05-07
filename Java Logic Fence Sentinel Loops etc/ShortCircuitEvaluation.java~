@@ -1,0 +1,22 @@
+/*
+ * Character.isLetter(str.charAt(3))
+ * str.substring(0,5).equals("Hello")
+ * str.substring(7,12).equals("world"
+ */
+import java.util.*;
+public class ShortCircuitEvaluation {
+  public static final Scanner = new Scanner(System.in);
+  public static void main(String[] args){
+    shortCircuit1(console, "Enter a string for short circuit test 1");
+  }
+  
+  
+  shortCircuit1(Scanner console, String str) {
+    System.out.println(str);
+    String test = console.nextLine();
+    char ch = test.charAt(i);
+    if(test.length() >=3 && Character.isLetter(test.charAt(3))){
+      System.out.println("Character 3 is a letter.");
+    }System.out.println("Character 3 is NOT letter.");
+  }
+}

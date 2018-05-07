@@ -1,0 +1,21 @@
+import java.util.*;
+
+public class EliminateRightDigit {
+  public static void main(String[] args) {
+    killRightDigit("1048576");
+  }
+  public static void killRightDigit(String sample) {
+    int index =  sample.length() - 1;
+    char c = '\0';
+    for(int i = 0; i < sample.length(); i++) {
+      System.out.print(index);
+      for(int b = 0; b <=index; b++) {
+       c = sample.charAt(b);
+       System.out.print(c + " ");
+      
+      }
+     index--;
+    }
+  }
+}
+

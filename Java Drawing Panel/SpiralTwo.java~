@@ -1,0 +1,27 @@
+/* g.drawArc(35, 45, 75, 95, 0, 90); g.drawArc(x,y, width, length, st ang., fin ang)
+ * #2 length = half of circumference, 1/2 * circumference is PI * width
+ * figure out top-left box for circle = 200,200 is center, 
+ * take off - 5 left and up for top-left of smallest arc's box is (175,175) box is 10 x 10
+ * x = 175, y = 175, width = 10, length (see above #2), 270, 360
+ */
+import java.awt.*;
+
+public class SpiralTwo {
+ 
+  public static void main(String[] args) {
+    DrawingPanel panel = new DrawingPanel(800,800);
+    Graphics g = panel.getGraphics();
+    drawArcs(g,panel);
+  }
+
+  public static void drawArcs(Graphics g, DrawingPanel panel) {
+    g.drawArc(175-0, 175-5*0, 10, 10, 0, -180);//start = +2*0
+    g.drawArc(175-0, 175-5*1, 10*2, 10*2, 0, 180);//+2*1f
+    g.drawArc(175-20, 175-5*3, 10*2*2, 10*2*2, 0, -180);//+2*2 below
+    g.drawArc(175-20, 175-5*7, 10*2*2*2, 10*2*2*2, 0, 180);//+2*2*2 below
+    g.drawArc(175-20-80, 175-5*15, 10*2*2*2*2, 10*2*2*2*2, 0, -180);//+2*2*2*2
+    g.drawArc(175-20-80, 175-5*31, 10*2*2*2*2*2, 10*2*2*2*2*2, 0, 180);
+    g.drawArc(175-20-80-320, 175-5*63, 10*2*2*2*2*2*2, 10*2*2*2*2*2*2, 0, -180);//+2*2*2*2
+    g.drawArc(175-20-80-320, 175-5*127, 10*2*2*2*2*2*2*2*2, 10*2*2*2*2*2*2*2, 0, 180);
+  }
+}

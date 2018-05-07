@@ -1,0 +1,26 @@
+public class Purchases {
+
+  public static void main(String[] args) {
+  
+  getTotalCost(7,30 );
+  
+  }
+
+  
+  public static double getTotalCost(int itemAmount, double pricePerItem) {
+    if(itemAmount < 5) {
+    return itemAmount*pricePerItem;
+    }
+    
+    if{itemAmount >= 5 && itemAmount < 25) {
+      return itemAmount*(pricePerItem*.90);
+    }
+  
+   if{itemAmount >= 25 && itemAmount < 50) {
+      return itemAmount*(pricePerItem*.85);
+    }
+   
+   return   return itemAmount*(pricePerItem*.80);
+  }
+
+}

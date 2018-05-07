@@ -1,0 +1,17 @@
+public class printMultipleCharacters {
+  public static void main(String[] args) {
+    
+    printCharacters('$', 5);
+  
+  }
+  
+  public class void printCharacters(char ch, int number) {
+    int i;
+    for(i = 1; i <= number; i++) {
+      
+     System.out.print(ch);
+     
+    }
+    System.out.println();
+  }
+}

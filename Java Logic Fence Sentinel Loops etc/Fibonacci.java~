@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Fibonacci {
+  public static void main(String[] args){
+  printFibonacci();
+  
+  }
+
+  public static void printFibonacci(){
+  int previous = 0;
+  int next = 1;
+  int count = 0;
+  System.out.print(previous + " " + next + " ");
+  while(next < 100) {
+    next = previous + next;
+    System.out.print(next + " ");
+  
+  }
+  }
+}

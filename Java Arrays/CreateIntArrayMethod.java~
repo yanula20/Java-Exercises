@@ -1,0 +1,35 @@
+import java.util.*;
+import java.util.Arrays;
+
+public class CreateIntArrayMethod{
+  //class constant for acquiring user input from Scanner
+  public static final Scanner console = new Scanner(System.in);
+  public static void main(String[] args){
+    // Input the number of days from the user.
+    System.out.print("How many days' temperatures? ");
+    int days = console.nextInt( );
+    
+    while(days < 0){
+      System.out.print("INVALID. How many days' temperatures? ");
+      int days = console.nextInt( );
+    }
+    
+    //create an array of length days
+    int[] array = new int[days];
+    
+    //store temp values in a zero-indexed array
+    for(int i = 0; i < array.length; i++){
+    System.out.print();
+    array[i] = console.nextInt();
+    }
+  }
+  
+  //note: return type will be char for function when string is segmented for the array
+  public static char[ ] toCharArray(String str) {   
+    char[ ] elements = new char[str.length( )];
+    for (int i = 0; i < str.length( ); i++) {
+      elements[i] = str.charAt(i);
+    }
+    return elements;
+  }
+}

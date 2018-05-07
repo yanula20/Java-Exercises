@@ -1,0 +1,27 @@
+import java.util.*;
+public class MaxInput_SecondLargest {
+  int secMax;
+    public static final Scanner console = new Scanner(System.in);
+    public static void main(String[ ] args) {
+        System.out.println("This program finds the maximum of a sequence of numbers.\n");
+     
+        System.out.print("How many numbers do you have? ");
+        int totalNumber = console.nextInt( );
+
+        System.out.print("Enter the first number: ");
+        double max = console.nextDouble( );
+        double secMax;
+        for (int i = 2; i <= totalNumber; i++) {
+            System.out.print("Enter the next number: ");
+            double next = console.nextDouble( );
+            if (max < next) {
+                secMax = max;
+                max = next;
+                System.out.println(max + " is the current new max...keep going!");
+                System.out.println(secMax + " is the previous max...keep going!");
+            }
+        } 
+
+        System.out.println("\nThe final max from your input is " + max);
+    }
+}

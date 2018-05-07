@@ -1,0 +1,34 @@
+import java.util.*;
+public class Assertions3{
+  public static final  Scanner console= new Scanner(System.in);
+  public static void main(String[] args){
+    pow(7,8);
+  }
+// This method assumes y >= 0, and returns x^y.
+  public static int pow(int x, int y) {
+    int prod = 1;
+    // Point A
+    while (y > 0) {
+      // Point B
+      if (y % 2 == 0) {
+        // Point C
+        x = x * x;
+        y = y / 2; 
+        // Point D
+      } else {
+        // Point E
+        prod = prod * x; 
+        y--;
+        // Point F
+      }
+    }//end while loop
+    // Point G
+    return prod;
+  }
+}
+/*which of the following assertions are true at which point(s) in the code?
+ Choose ALWAYS, NEVER, or SOMETIMES.
+             Point A     Point B     Point C     Point D     Point E     Point F     Point G  
+ y > 0       SOMETIMES   ALWAYS      ALWAYS      SOMETIMES   ALWAYS      SOMETIMES   NEVER
+ y % 2 == 0  SOMETIMES   SOMETIMES   ALWAYS      ALWAYS      NEVER       NEVER       NEVER
+ */

@@ -1,0 +1,17 @@
+Welcome to DrJava.  Working directory is V:\drjava\labs\lab0
+> run Initials
+Lab 0 written by DONALD_ANDRE_MOORE
+
+D D                A             M         M
+D   D            A   A           M M     M M
+D    D          A     A          M   M M   M
+D     D        A A A A A         M    M    M
+D     D       A         A        M         M
+D    D       A           A       M         M
+D   D       A             A      M         M
+D D        A               A     M         M
+
+This lab provides practice
+ using print line statements
+ to display my initials.
+> 

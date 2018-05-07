@@ -1,0 +1,212 @@
+import java.util.*;
+import java.awt.*;
+
+//Main program - Survivor I
+public class SurvivorI {
+  public static void main(String[] args) {
+    System.out.println("Project 2 written by Donald Moore, UTSAID: qxv177");
+    boolean test = false;
+    int i;//for the game for loop
+    
+    /* Create DrawingPanel and draw a box in the panel.
+     The box is a square of this size. */
+    int boxSize = 760;
+    DrawingPanel panel = new DrawingPanel(800, 800);
+    Graphics g = panel.getGraphics();
+    g.fillRect(10, 10, 10, 780);
+    g.fillRect(10, 10, 780, 10); 
+    g.fillRect(780, 10, 10, 780); 
+    g.fillRect(10, 780, 780, 10);
+    
+    // Initialize positions of runner and chaser.
+    Point runner = new Point(200, 400);
+    Point chaser = new Point(600, 400);
+    
+    // Variable for input from user to move runner.
+    char keyInput = ' ';
+    
+    // The program should wait sleepTime ms between moves.
+    int sleepTime = 100;
+    
+    // The runner should move moveSize (or zero) pixels each time step.
+    // The chaser should move moveSize - 1 pixels each time step.
+    int moveSize = 10;
+    
+    // Display players using Color.GREEN and Color.RED (or whatever colors you want).
+    displayPlayers(panel, runner, chaser);
+    
+    // Wait one second before start of game.
+    panel.sleep(1000);
+    
+    for(i=1; i <=300; i++){
+      
+      // Display players: Color.GREEN for the Runner and Color.RED for the Chaser.
+      displayPlayers(panel, runner, chaser);
+      
+      // Get input from user if any.
+      char newKeyInput = panel.getKeyChar();
+      if (newKeyInput == 'w' || newKeyInput == 'a' || newKeyInput == 's' || newKeyInput == 'd') {
+        keyInput = newKeyInput;
+      } 
+      // Wait sleepTime ms between moves.
+      panel.sleep(sleepTime);
+      
+      // Erase players from the panel using Color.WHITE.
+      erasePlayers(panel, runner, chaser);
+      
+      // Move the players according to parameters.
+      movePlayers(runner, chaser, keyInput, boxSize, moveSize);
+      
+      // Game is over if the chaser catches up to the runner.
+      test = collision(runner, chaser);
+      if (test) {
+        runnerDies(runner, panel, g);
+        System.out.println("YOU LOST!!!");
+        break;//exit the loop to end the game because the runner was caught
+      }
+      
+    }//end of game for loop 300 ticks
+    
+    //If game for loop reaches 300, that means no collisons have occured and the player has won.
+    if(!test) {
+      System.out.println("YOU WON!!!");
+    }
+  }
+  
+  //this method provides basic game/program information to the user
+  public static void getIntro() {
+    System.out.println("In this game there will be a runner and a chaser.");
+    System.out.println("The computer will control the chaser, which should always move");
+    System.out.println("toward the runner. The user (you) will control the runner by keyboard input.");
+    System.out.println( "The goal is to keep away from the chaser for a short amount of time (300 ticks).");
+  }
+  /* method is used to ensure that the runner and chaser are within the confines of the play area. This constitutes 
+   * a LEGAL MOVE and returns true */
+  public static boolean legalMoveTest(Point test, int boxSize) {
+    if((20 < test.getX() && test.getX() + 10 < boxSize+20) && (20 < test.getY() && test.getY() + 10 < boxSize+20)) {         
+      return true;
+    }
+    return false;
+  }
+  /* This method calculates the best move for the chaser by calculating its four hypothetical moves (top, bottom, left, or right) and, then, checking which out of the
+   * four moves is the closest to the runner. The closest move returns an integer that is passed to the movePlayers() method.
+   * Note: calculations are done from the center(s) of the runner and chaser */
+  public static int bestMoveChaser(Point runner, Point chaser, char keyInput, int boxSize, int moveSize) {
+    double distLeft =  Math.sqrt(Math.pow(Math.abs((chaser.getY()+5)-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5-(moveSize-1))-(runner.getX()+5)),2));
+    double distRight = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5)-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5+(moveSize-1))-(runner.getX()+5)),2));
+    double distTop = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5-(moveSize-1))-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5)-(runner.getX()+5)),2));
+    double distBottom = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5+(moveSize-1))-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5)-(runner.getX()+5)),2));
+    if(distLeft <= distRight && distLeft <= distTop && distLeft <= distBottom) {
+      return 0;
+    }else if(distRight <= distLeft && distRight <= distTop && distRight <= distBottom) {
+      return 2;
+    }else if(distTop <= distLeft && distTop <= distRight && distTop <= distBottom) {
+      return 1;
+    } else{
+      return 3;
+    }
+  }
+  
+  /*this method moves the runner and chaser points a fixed distance (moveSize) based on user keyInput
+   AFTER a boolean method (runnerLegalCheck & chaserLegalCheck) ensures that the requested move is valid*/
+  public static void movePlayers(Point runner, Point chaser, char keyInput, int boxSize, int moveSize) {
+    boolean runnerLegalCheck = legalMoveTest(runner,boxSize);
+    boolean chaserLegalCheck = legalMoveTest(chaser,boxSize);
+    
+    /* short-circuit, if legal move checks are false control statements go to last 
+     condition of no movment, i.e. translate(0, 0) */
+    if(runnerLegalCheck && keyInput == 'w') {
+      runner.translate(0, -moveSize);//up
+    }else if(runnerLegalCheck && keyInput == 'a') {
+      runner.translate(-moveSize, 0);//left
+    }else if(runnerLegalCheck && keyInput == 's')  {
+      runner.translate(0, moveSize);//down
+    }else if(runnerLegalCheck && keyInput == 'd')  {
+      runner.translate(moveSize, 0);//right
+    } else{
+      runner.translate(0, 0);
+    }
+    
+    /* this method returns the shortest distance for the chaser 
+     * (either 0 - left, 1 - top, 2 - right, 3 - bottom). This provides
+     * the best move or best chance to collide with the runner. 
+     */
+    int chaseDirection = bestMoveChaser(runner, chaser, keyInput, boxSize, moveSize);
+    
+    /* short-circuit, if legal move checks are false control statements go to last 
+     condition of no movment, i.e. translate(0, 0) */
+    if(chaserLegalCheck && chaseDirection == 0) {
+      chaser.translate(-(moveSize-1),0);//left
+    }else if (chaserLegalCheck && chaseDirection == 1  ) {
+      chaser.translate(0,-(moveSize - 1));//chase up
+    }else if (chaserLegalCheck && chaseDirection == 2 ) {
+      chaser.translate((moveSize - 1), 0);//chase right
+    }else if (chaserLegalCheck && chaseDirection == 3) {
+      chaser.translate(0,(moveSize - 1));//chase down
+    }else {
+      chaser.translate(0, 0);
+    }
+  }//end movePlayers method
+  
+  /* method displays runner and chaser by first getting the x,y coordinates of their respective points(.getx(), .getY()), 
+   * then drawing them as a filled in rectangle. */
+  public static void displayPlayers(DrawingPanel panel, Point runner, Point chaser) {
+    Graphics g = panel.getGraphics();
+    g.setColor(Color.GREEN);
+    g.fillRect((int)runner.getX(),(int)runner.getY(),10,10);
+    g.setColor(Color.RED);
+    g.fillRect((int)chaser.getX(),(int)chaser.getY(),10,10);
+  }
+  
+  // method erases the runner and the chaser to simulate movement 
+  public static void erasePlayers(DrawingPanel panel, Point runner, Point chaser) {
+    Graphics g = panel.getGraphics();
+    g.setColor(Color.WHITE);
+    g.fillRect((int)runner.getX(),(int)runner.getY(),10,10);
+    g.setColor(Color.WHITE);
+    g.fillRect((int)chaser.getX(),(int)chaser.getY(),10,10);
+  }
+  
+  // this method tests whether the runner and the chaser have collided
+  public static boolean collision(Point runner, Point chaser) {
+    double collide = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5)-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5)-(runner.getX()+5)),2));
+    
+    if(collide <= 10.0){
+      return true;
+    }else {
+      return false;
+    }
+  }
+  
+  //this method adds animation to simulate the death of the runner after the collision() method returns true
+  public static void runnerDies(Point runner, DrawingPanel panel, Graphics g) {
+    double x = runner.getX();
+    double y = runner.getY();
+    
+    int delta = -1;
+    int shrink = 40;
+    for(int j = 1; j <= 10; j++) {
+      shrink = shrink-j;
+      
+      panel.sleep(100);
+      g.setColor(Color.WHITE);
+      g.drawString("AAAAARGGH",(int)x,(int)y);
+      g.setColor(Color.WHITE);
+      g.fillRect((int)runner.getX(),(int)runner.getY(),shrink,shrink);
+      
+      panel.sleep(100);
+      g.setColor(Color.GREEN);
+      g.fillRect((int)runner.getX(),(int)runner.getY(),shrink,shrink);
+      g.setColor(Color.RED);
+      g.drawString("AAAAARGGH",(int)x,(int)y);
+      
+      panel.sleep(100);
+      g.setColor(Color.WHITE);
+      g.drawString("AAAAARGGH",(int)x,(int)y);
+      g.setColor(Color.WHITE);
+      g.fillRect((int)runner.getX(),(int)runner.getY(),shrink,shrink);
+    }
+    g.setColor(Color.RED);
+    g.drawString("GAME OVER!",(int)x,(int)y);
+  }
+}

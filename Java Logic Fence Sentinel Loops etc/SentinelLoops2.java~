@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class SentinelLoops2 {
+  //class constant for user input
+  public static final Scanner console = new Scanner(System.in);
+  public static void main(String[] args){
+  System.out.print("Enter a word to be printed or goodbye to quit.");
+   String value1 = console.nextLine();
+   sentinelGoodbye(console, value1);
+  }
+  
+  public static void sentinelGoodbye(Scanner console, String value1){
+    String max = "";
+    String value2 = "";
+    while(value2 != "goodbye"){
+      System.out.print("Enter a word to be printed or goodbye to quit.");
+      value2 = console.nextLine();
+      //input, value1, is for assignment of max below
+      if(value1.length() < value2.length()){
+        max = value2;
+      }else{
+        max = value1;
+      }
+      System.out.println("The longest word that you entered was " + max);
+    }
+    
+  }
+}

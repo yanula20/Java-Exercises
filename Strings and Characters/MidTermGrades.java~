@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class MidTermGrades {
+  public static final Scanner CONSOLE = new Scanner(System.in);
+ 
+  public static void main(String[] args) {
+    System.out.print("Enter class max avg: ");
+    double maxCourseAvg = CONSOLE.nextDouble();
+    System.out.print("Enter class class avg: ");
+    double courseAvg = CONSOLE.nextDouble();
+    yourGPA(maxAvg, classAvg);
+  
+  }
+  
+  public static double yourGPA(double maxCourseAvg, double courseAvg) {
+    double youGrade = courseAvg / maxCourseAvg;
+  
+  }
+  
+}

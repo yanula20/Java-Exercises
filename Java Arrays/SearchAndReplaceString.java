@@ -1,0 +1,66 @@
+/*Activity: Search and Replace
+ Modify the int searching program so the user 
+ is prompted for a replacement value.*/
+
+import java.util.*;
+import java.util.Arrays;
+
+public class  SearchAndReplaceString{
+  public static final Scanner console = new Scanner(System.in);
+  public static void main(String[] args){
+    int arrayLength = 0;
+    
+    while(arrayLength <=0){
+      System.out.print("Enter an integer for the number of elements of your array.");
+      arrayLength = console.nextInt();
+    }
+    
+    String[] array = new String[arrayLength];
+    
+    for(int i = 0; i < arrayLength; i++){
+      System.out.print("Enter your string elements");
+      
+      boolean continueLoop = true;
+      while(continueLoop){
+        if(console.hasNextInt()){
+          console.next(); //flush buffer
+          System.out.print("Enter your string elements");
+          continueLoop = true;
+        }else{
+          array[i] = console.next();
+          continueLoop = false;
+        }
+      }
+    }
+    
+    System.out.println("This is your array before replacements: " + Arrays.toString(array));
+    //prompt the user for a value to be replaced
+    System.out.print("Enter string value to be replaced.");
+    String value = console.next();
+    //prompt the user for a replacement value
+    System.out.print("Enter your replacement value or newValue.");
+    String newValue = console.next();
+    
+    int lostOrFound = replace(array, value, newValue);
+    System.out.println("lostOrFound = " + lostOrFound);
+    if(lostOrFound != -1){
+      System.out.println("We replaced " + value + " with " + newValue + "!");
+      System.out.println("This is your MODIFIED array with changes: " + Arrays.toString(array));
+    }else{
+      System.out.println("We could not find " + value + ". So, we couldn't replace it!");
+      System.out.println("This is your UNCHANGED array: " + Arrays.toString(array));
+    }
+    
+  }//end main
+  
+  public static int replace(String[] array, String value, String newValue){
+    for(int i = 0; i < array.length; i++){
+      if(value.trim().equals(array[i])){
+        array[i] = newValue;
+        return i;
+      }
+    }//end for looop
+    // To get to this point, the value must not be in the array.
+    return -1;
+  }
+}

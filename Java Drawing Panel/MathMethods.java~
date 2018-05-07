@@ -1,0 +1,23 @@
+public class MathMethods {
+  public class void main(String[] args) {
+    double abs = Math.abs(-1.23);
+    System.out.println("Absolute value of -1.23 is " + abs);
+    System.out.println("Math.pow(a,b) calculates a^b, ex. 4^7 equals " +  getMathPower(4, 7));
+    System.out.println("Math.pow(a,b) calculates a^b, ex. 10^-2 equals " +  getMathPower(10, -2));
+    
+  }
+}
+
+
+
+public static int getMathPower(int number, int power) {
+  return Math.pow(number, power);
+}
+
+/*Math.pow(10, -2)
+Math.sqrt(121.0) - Math.sqrt(256.0)
+Math.round(Math.PI) + Math.round(Math.E)
+Math.ceil(6.022) + Math.floor(15.9994)
+Math.abs(Math.min(-3, -5))
+*/
+

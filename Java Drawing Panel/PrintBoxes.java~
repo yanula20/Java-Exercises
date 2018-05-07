@@ -1,0 +1,32 @@
+public class PrintBoxes {
+  public static void main(String[] args) {
+    
+  }
+  
+  
+  public static void drawBoxesWithDimensions(int h, in w) {
+    int = i;
+    //draw box top
+    for(i = 1; i <= w; i++) {
+      System.out.print("*");
+    }
+    System.out.println();
+    
+    //draw box sides
+    
+    for(i = 1; i <= h - 2 ; i++) {
+      System.out.print("*");
+      
+      for(i = 1; i <= w - 2; i ++) {
+        System.out.print(" ");
+      }
+      
+      System.out.print("*");
+    }
+    
+    //box bottom
+    for(i = 1; i <= w; i++) {
+      System.out.print("*");
+    }
+  }
+}

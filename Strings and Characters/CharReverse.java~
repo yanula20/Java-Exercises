@@ -1,0 +1,21 @@
+import java.util.*;
+
+public class CharReverse {
+   public static final Scanner CONSOLE = new Scanner(System.in);
+ 
+  
+  public static void main(String[] args) {
+    System.out.print("Please type a message");
+    String message = CONSOLE.next();
+    reverse(message);
+   
+  }
+  
+  public static String reverse(String message) {
+    String message = "";
+    int i;
+    for(i = 0; i <= message.length(); i++) {
+      message = message.charAt(i) + message;
+    } return message;
+  }
+}

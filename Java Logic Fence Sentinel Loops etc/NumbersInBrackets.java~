@@ -1,0 +1,28 @@
+//This program prints the following with a fencepost: [1 2 3 4 5]
+import java.util.*;
+public class NumbersInBrackets{
+  public static final Scanner console = new Scanner(System.in);
+  
+  public static void main(String[] args){
+    System.out.print("Enter the number of digits for the brackets-->");
+    
+    if(!console.hasNextInt()){
+      System.out.println("Invalid entry. Try again.");
+//clear buffer, ask prof
+    }else{
+      int num = console.nextInt();
+       printNumbersWithBrackets(num);
+    }
+   
+  }
+  public static void printNumbersWithBrackets(int num){
+    System.out.print("[");
+    for(int i = 1; i <= num; i++){
+      if(i != num){
+        System.out.print(i + " ");
+      }else {
+        System.out.println(num + "]");
+      }
+    }
+  }
+}

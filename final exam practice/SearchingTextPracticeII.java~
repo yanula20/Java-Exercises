@@ -1,0 +1,32 @@
+/*File infile = new File("temperature.txt");
+ To read from this file, a Scanner object can be constructed by this statement. 
+ Scanner input = new Scanner(infile);
+ For most purposes, we don't need the File object except for constructing the 
+ Scanner object, so the above two statements can be coded into one statement. 
+ Scanner input = new Scanner(new File("temperature.txt")); 
+ */
+
+import java.util.*;
+import java.util.Arrays;
+import java.io.*;
+
+public class SearchingTextPracticeII{
+  public static void main(String[] args)throws FileNotFoundException{
+    //alternatively: Scanner input = new Scanner(new File("iris.txt"));
+    File file = new File("searchtext.txt");
+    Scanner input = new Scanner(file);
+   // System.out.println(input.nextLine()); pointer stops, must close to get pointer back to beginning of text
+    int count = 0;
+    String text = " ";
+    while(input.hasNext()){
+      text = text + input.next();
+    }
+    
+    for(int i = 0; i < text.length(); i++){
+    count++;
+    }
+    input.close();
+   
+  }//end main
+}//end program
+

@@ -1,0 +1,6 @@
+This is a sample text for 12 final exams. 33 students will likely pass, while 4 will fail.
+Here are some special characters: &*%$#@.
+I also need CapITal LETTers 23 and lowercase letters!
+
+
+

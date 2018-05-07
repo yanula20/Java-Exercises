@@ -1,0 +1,156 @@
+/* Technical note: Random method.
+ * Here, the nextInt method of the Random class is used 
+ * to generate a random int between 0 and 99.  Change 
+ * the 100 to a different value if you want a different range. 
+ * Each integer between 0 and 99 is equally likely.  51 of these 
+ * integers are less than 51 (from 0 to 50), so testing if the 
+ * integer is less than 51 means that 51 integers make the test true, 
+ * and that 49 integers make the test false, a 51% chance of being true! 
+ */
+
+//We need a Java utility (the Scanner class) for keyboard input.
+import java.util.*;
+
+//main java program
+public class Playoffs1 {
+  
+  // set up a class constant named CONSOLE to read from the keyboard  
+  public static final Scanner console = new Scanner(System.in);
+  
+  //main method of Playoffs program
+  public static void main(String[] args) {
+    
+    //print info about the Playoff program for the user
+    printProgramInfo();
+    
+    //1) method call to play a single game between Teams 1 and 2
+    getOneGameParameters(console);
+    
+    //2) method call to play a seven-game series between Teams 1 and 2
+    getPlayoffParameters(console);
+    
+    /* 3) method call to find the amount of games needed to be played for team 1
+     to have 10 more playoff series win than team 2 */
+    getWinnerByTenGamesParameters(console);
+   
+  }
+  
+  public static void  printProgramInfo() {
+    System.out.println("Simulate a best-of-seven games playoff using information supplied by the user.");
+    System.out.println("Print information about the result of each simulated playoff");
+    System.out.println("and about the result of multiple simulations.");
+    System.out.println();
+  }
+  public static void getOneGameParameters(Scanner console) {
+    int chancesTeamOne;
+    int num1;
+    Random rand = new Random();
+    int oneGameResults;
+    System.out.print("Enter the percent chance that Team 1 will win the game: (1 to 100).");
+    chancesTeamOne = console.nextInt();
+    num1 = rand.nextInt(100);
+    oneGameResults = playOneGame(num1, rand, chancesTeamOne);
+    printGameOneResults(oneGameResults);
+  }
+  public static int playOneGame(int num1, Random rand, int chancesTeamOne) {
+    /*System.out.println("Single game: Team 1 plays Team 2.");
+    Random rand = new Random();
+    int num1 = rand.nextInt(100);*/
+    if(num1 < chancesTeamOne) {//0 - 50 represents 51% of 0 - 99: A team 1 WIN!
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+  
+  public static void getPlayoffParameters(Scanner console) {
+     int num1;
+     int playOffChances;
+     int sevenGameResults;
+     Random rand = new Random();
+     System.out.print("Enter the percent chance that Team 1 will win the 7-game playoff: (1 to 100).");
+     playOffChances = console.nextInt();
+     num1 = rand.nextInt(100);
+     System.out.println(num1);
+     sevenGameResults = playSevenGameSeries(num1, rand, playOffChances);
+     printSevenGameResults(sevenGameResults);
+  
+  }
+  public static int playSevenGameSeries(int num1, Random rand, int playOffChances) {
+    int teamOneCount = 0;
+    int teamTwoCount = 0;
+    int winner = 0;
+    
+    //teamCounts go from 1 to 7, no one team can win more than four games
+    //While logic fires first before executing which means teamCount starts at 0 - 6 = 7 games
+    while(teamOneCount + teamOneCount < 8 && teamOneCount < 4 && teamTwoCount < 4){
+      int result = rand.nextInt(num1);
+      if(result < playOffChances ) {
+        teamOneCount++;
+      } else {
+        teamTwoCount++;
+      }
+      
+      if(teamOneCount > teamTwoCount ) {
+        winner = 1;
+      } else{
+        winner = 0;
+      }  
+    }
+    /* System.out.println("Team 1 score: " + teamOneCount + ", Team 2 score: " + teamTwoCount); */
+    return winner; 
+  }
+  
+  public static void getWinnerByTenGamesParameters(Scanner console) {
+     int num1;
+     int tenGameChances;
+     Random rand = new Random();
+     System.out.print("Enter the percent chance that Team 1 have 10 more playoff wins than Team 2: (1 to 100).");
+     tenGameChances = console.nextInt();
+     num1 = rand.nextInt(100);
+     System.out.println(num1);
+     winnerByTenGames(num1, rand, tenGameChances);
+  }
+  
+  public static void winnerByTenGames(int num1, Random rand, int tenGameChances) {
+    int team1 = 0;
+    int team2 = 0;
+    int playOffWins;
+    String tally = "";
+    while(team1 <= team2 + 9) {//remember, while fires at 0 b/c of team1 and team2=0
+      playOffWins = playSevenGameSeries(num1, rand, tenGameChances);
+      if(playOffWins == 1) {
+        team1++;
+        tally = tally + " +";
+        System.out.print(team1);
+      }else{
+        team2++;
+        tally = tally + " 2";
+        System.out.print(tally);
+      }
+    }
+  }
+  
+  public static void printGameOneResults(int oneGameResults) {
+    //conditional check result of the single game method and prints out the winner
+    if(oneGameResults == 1) {
+      System.out.println("Single game result: Team 1 wins!");
+      System.out.println();
+    }else {
+      System.out.println("Single game result: Team 2 wins!");
+      System.out.println();
+    }
+  }
+  public static void printSevenGameResults(int sevenGameResults) {
+    if(sevenGameResults == 1) {
+      System.out.println("7-game series result: Team 1 wins!");
+      System.out.println();
+    }else {
+      System.out.println("7-game series result: Team 2 wins!");
+      System.out.println();
+    }
+  }
+}
+
+
+ 

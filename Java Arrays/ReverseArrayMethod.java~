@@ -1,0 +1,25 @@
+/* Activity: Reverse Array Method
+Write and test a method for reversing a double array.
+
+
+  0     1     2     3     4  
+  2    -3     5    -7     11*/
+
+import java.util.*;
+import java.util.Arrays;
+
+public class  ReverseArrayMethod{
+  public static void main(String[] args){
+    int[] array1 = {2, -3, 5, -7, 11};
+    int[] array2 = {1, 2, 3, 4};
+    
+  }//end main
+  
+  for(int left = 0; left < array.length/2; left++){
+  int right = (array.length - 1) - left;
+  int temp = array[left];
+  array{left] = array[right];
+  array[right] = temp;
+  
+  }
+}

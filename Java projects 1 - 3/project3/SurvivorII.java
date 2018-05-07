@@ -1,0 +1,485 @@
+//We need a Java utility (the Scanner class) for keyboard input.
+import java.util.*;
+
+//Java utility for the Drawing panel
+import java.awt.*;
+
+//Main program - Survivor II
+public class SurvivorII {
+  //class constant for user input
+  public static final Scanner console = new Scanner(System.in);
+  
+  //class constant that fixes runner, chaser, and zombie size to 10 pixels
+  public static final int PLAYER_SIZE = 10;
+  
+  //program's main method
+  public static void main(String[] args) {
+    System.out.println("Project 3 written by Donald Moore, ABC123: qxv177");
+    
+    //this method prints general info about the Survivor II
+    getIntro();
+    
+    // Initialize positions of runner, chasers, and zombies.
+    Random random = new Random();
+    
+    Point zombie;
+    int numZombies = -1; 
+    int boxSize = 0;
+    int sleepTime = 0;
+    int temp;
+    int moveSize = 0;
+    //use a boolean to indicate when the game is lost
+    boolean lost = false;
+    
+    /*use this boolean flag to end the game when all zombies are dead and to draw the text, "GAME OVER", 
+    in the game play area.*/
+    boolean gameOver = false;
+    
+    /* use this boolean for the game play while loop. The while loop continues 
+     * until this flag is switched to false. flag is switched to false ONLY when all 
+     * zombies are dead or when the chaser catches the runner.*/
+    boolean continueGameLoop = true;
+    
+    //Request user input for the game's parameters
+    System.out.print("Enter the number of zombies, box size, move size, and sleep time: ");
+    
+    //check user input for number of zomies; default is 10;
+    if(!console.hasNextInt()){
+      console.next();//flush buffer
+      numZombies = 10;
+    }else{
+      temp = console.nextInt(); //beware: calling nextInt() twice in if else; 15,  -1
+      if(temp <= 0){
+        numZombies = 10;
+      }else {
+        numZombies = temp;
+      }
+    }
+    //check user input for boxSize; default is 760;
+    if(!console.hasNextInt()){
+      console.next();//flush buffer
+      boxSize = 760;
+    }else{
+      temp = console.nextInt(); 
+      if(temp <= 0){
+        boxSize = 760;
+      }else {
+        boxSize = temp;
+      }
+    }
+    
+    //check user input for moveSize; default is 10;
+    if(!console.hasNextInt()){
+      console.next();//flush buffer
+      moveSize = 10;
+    }else{
+      temp = console.nextInt(); 
+      if(temp <= 0){
+        moveSize = 10;
+      }else {
+        moveSize = temp;
+      }
+    }
+    //check user input for sleepTime; default is 100;
+    if(!console.hasNextInt()){
+      console.next();//flush buffer
+      sleepTime = 100;
+    }else{
+      temp = console.nextInt(); 
+      if(temp <= 0){
+        sleepTime = 100;
+      }else {
+        sleepTime = temp;
+      }
+    }
+    
+    /* Create DrawingPanel and draw a box in the panel. note: boxSize represents the space within
+    the black strip surrounding the play area. */
+    DrawingPanel panel = new DrawingPanel(boxSize + 40, boxSize + 40);
+    Graphics g = panel.getGraphics();
+    g.fillRect(10, 10, 10, boxSize + 20);
+    g.fillRect(10, 10, boxSize + 20, 10);
+    g.fillRect(boxSize + 20, 10, 10, boxSize + 20);
+    g.fillRect(10, boxSize + 20, boxSize + 20, 10);
+    
+    //create the runner and chaser points within the box size provided by the user
+    Point runner = new Point(boxSize/4, boxSize/2);
+    Point chaser = new Point(3*boxSize/4,boxSize/2);
+    //System.out.print(numZombies + " " + boxSize + " " + moveSize + " " + sleepTime ); for testing purposes only
+    
+    //create an array zombies with the length of input, numZombies
+    Point[] zombies = new Point[numZombies];
+    
+    /* The X and Y coordinates for each zombie should be random values between 30 to (boxSize - 30). */
+    for(int j = 0; j < zombies.length; j++){
+      do{
+        zombie = new Point(random.nextInt(boxSize) + 30,random.nextInt(boxSize) + 30);
+        zombies[j] = zombie;
+      }while(!isZombieCreatedInbounds(zombie, boxSize) || createdZombieSingleCollision(runner, zombie));
+    }
+    
+    /*create an array deadZombies to track which ones have been killed by the 
+     all elements are initialized as false by default in boolean arrays */
+    boolean [] deadZombies = new boolean[numZombies];
+    // Variable for input from user to move runner.
+    
+    char keyInput = ' ';
+    
+    // Display players using Color.GREEN and Color.RED  and Color.BLUE (or whatever colors you want).
+    displayPlayers(panel, runner, chaser, zombies, deadZombies);
+    
+    // Wait one second before start of game.
+    panel.sleep(1000);
+    
+    // Wait until a character is entered
+    keyInput = panel.getKeyChar();
+    while (keyInput == 0) {
+      keyInput = panel.getKeyChar();
+    }
+    
+    /* this is the game play's while loop. the game continues until the runner 
+     * is caught or all zombies are dead */
+    while (continueGameLoop) {
+      
+      // Erase players from the panel using Color.WHITE.
+      erasePlayers(panel, runner, chaser, zombies, g);
+      
+      // Get input from user if any.
+      char newKeyInput = panel.getKeyChar();
+      if (newKeyInput == 'w' || newKeyInput == 'a' || newKeyInput == 's' || newKeyInput == 'd') {
+        keyInput = newKeyInput;
+      }
+      
+      // Move the players according to parameters.
+      movePlayers(runner, chaser, zombies, deadZombies,
+                  keyInput, boxSize, moveSize, g);
+      
+      // Display players using Color.GREEN and Color.RED (or whatever colors you want).
+      displayPlayers(panel, runner, chaser, zombies, deadZombies);
+      
+      //Game is over if the runner collides with chaser or zombie.
+      if (collision(runner, chaser)) {
+        /* technical note: call the erasePlayers() method first before playing the runnerDies() method's animation; 
+         * if not, a ghost (dead) runner will be left on the panel */
+        erasePlayers(panel, runner, chaser, zombies, g);
+        runnerDies(runner, panel, g, boxSize);
+        g.setColor(Color.RED);
+        g.drawString("GAME OVER!", boxSize/2 - 30, boxSize/2);
+        System.out.println("YOU LOST!!!");
+        lost = true;
+        break;
+      }
+      
+      /*this loop has checks the deadZombies array for zombie - runner collisions. if a collision has occured
+       * and that zombie's boolean is false in the deadZombies array, then the boolean is switched to true to keep track
+       that it is now dead. a deadZombies array with all true elements means that the game is over and that the user has won
+       the game. */
+      for (int i = 0; i < deadZombies.length; i++) {
+        if ( collision(runner, zombies[i]) && deadZombies[i] != true) {
+          deadZombies[i] = true;
+          displayDeadZombieWhite(g,zombies[i]);
+          
+          /* game is over if all of the zombies are dead, i.e. all elements of the deadZombies boolean array   
+           * are true. */
+          if(areAllZombiesDead(deadZombies)){
+            
+            //erase runner, chaser, and zombies AFTER all zombies are dead
+            erasePlayers(panel, runner, chaser, zombies, g);
+            
+            //at this point all zombies are dead and the gameOver boolean flag is switched from false to true
+            gameOver = true;
+            
+            lost = false;
+            
+            //this boolean flag is turned from true to false in order to end the game play's while loop
+            continueGameLoop = false;
+          }
+        }
+      }
+      
+      if (lost) break;
+      
+      // Wait sleepTime ms between moves.
+      panel.sleep(sleepTime);
+    }//end game while loop
+    
+    //System.out.println(Arrays.toString(deadZombies)); for testing purposes only
+    
+    //gameOver flag is switched to true when all the of the zombies are dead
+    if (gameOver) {
+      g.setColor(Color.RED);
+      g.drawString("GAME OVER!",boxSize/2 - 30 ,boxSize/2);
+      System.out.println("YOU WON!!!");
+    }
+  }
+  
+  //this method provides basic game/program information to the user
+  public static void getIntro() {
+    System.out.println("This game has a runner, a chaser, and zombies. A zombie moves in one of four");
+    System.out.println("random dirctions (up, down, left, or right). The object of the game is for the runner to eliminate");
+    System.out.println("all the zombies (by colliding with them) and to avoid being caught by the chaser.");
+    System.out.println("The runner wins when all the zombies are eliminated.");
+    System.out.println("The runner loses if the chaser catches the runner before all the zombies have been eliminated.");
+  }
+  
+  /* the deadZombies array passed into this method checks whether at least one zombie is alive or 
+   * whether all of the zombies are dead. Note: the game ends when this method returns true, meaning
+   * that all of the zombies are dead.
+   */
+  public static boolean areAllZombiesDead(boolean[] deadZombies){
+    for(int d = 0; d < deadZombies.length; d++){
+      if(deadZombies[d] == false){
+        //the first element of the deadZombies array with a false value will end the for loop
+        return false;
+      }
+    }//end for loop
+    
+    //if we reach this point, the deadZombies array does not contain any false values
+    return true;
+  }
+  
+  /* This method is used at zombie creation and is one of two tests to determine whether a VALID zombie is created.
+   * In the program's main method, zombie points are created one at a time in a do while loop. 
+   * The method tests whether a zombie is created INBOUNDS, i.e. within 30 to (boxSize - 30) pixels (non-inclusive) 
+   * in BOTH the vertical and horizontal directions.  All valid-created zombies are 
+   * added to the zombie array for tracking throughout the game.
+   */
+  public static boolean isZombieCreatedInbounds(Point zombie, int boxSize){
+    if(30 < (int)zombie.getX() && (int)zombie.getX() < boxSize - 30 
+         && 30 < (int)zombie.getY() && (int)zombie.getY() < boxSize - 30 ){
+      
+      return true;
+    }
+    return false;
+  }
+  
+  /* This method is used at zombie creation and is one of two tests to determine whether a VALID zombie is created.
+   * In the program's main method, zombie points are created one at a time in a do while loop. 
+   * This method ensures that, at a zombie does not collide with the runner AT ITS CREATION. 
+   * That is, we will not create a zombie that overlaps of our runner. All validly-created zombies are 
+   * added to the zombie array for tracking throughout the game.
+   */
+  public static boolean createdZombieSingleCollision(Point runner, Point zombie) {
+    
+    double collide = Math.sqrt(Math.pow(Math.abs((zombie.getY())-(runner.getY())),2) 
+                                 +  Math.pow( Math.abs((zombie.getX())-(runner.getX())),2));
+    
+    if(collide <= PLAYER_SIZE){
+      return true;
+    }
+    //if code reaches this point, the runner has not collided with a zombie
+    return false;
+  }
+  //this method is used to draw the runner, chaser, and zombies
+  public static void displayPlayers(DrawingPanel panel, Point runner, Point chaser, 
+                                    Point[] zombies, boolean[] deadZombies) {
+    Graphics g = panel.getGraphics();
+    g.setColor(Color.GREEN);
+    g.fillRect((int)runner.getX() - PLAYER_SIZE / 2, (int)runner.getY() - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
+    
+    g.setColor(Color.RED);
+    g.fillRect((int)chaser.getX() - PLAYER_SIZE / 2, (int)chaser.getY() - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
+    
+    Random random = new Random();
+    //only alive zombies are displayed
+    for(int i = 0; i < zombies.length;i++){
+      if(deadZombies[i] != true){
+        g.setColor(Color.BLUE); 
+        g.fillRect((int)zombies[i].getX() -  PLAYER_SIZE/2, (int)zombies[i].getY() -  PLAYER_SIZE/2, PLAYER_SIZE, PLAYER_SIZE);
+        float r = random.nextFloat(); // 0 to 1;
+        float y = random.nextFloat(); 
+        float b = random.nextFloat();
+        Color randomColor = new Color(r,y,b);
+        g.setColor(randomColor);
+        g.fillRect((int)zombies[i].getX() - 3, (int)zombies[i].getY() - 3, 6, 6);
+      }
+    }
+  } 
+  
+  //this method erases the runner, chaser, and zombies for animation
+  public static void erasePlayers(DrawingPanel panel, Point runner, Point chaser, Point[] zombies, Graphics g) {
+
+    // erase runner
+    g.setColor(Color.WHITE);
+    g.fillRect((int)runner.getX() - PLAYER_SIZE / 2, (int)runner.getY() - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
+    
+    //erase chaser
+    g.setColor(Color.WHITE);
+    g.fillRect((int)chaser.getX() - PLAYER_SIZE / 2, (int)chaser.getY() - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
+    
+    // erase zombies that are still in play
+    for(int z = 0; z < zombies.length; z++){
+      g.setColor(Color.WHITE);
+      g.fillRect((int)zombies[z].getX() - PLAYER_SIZE / 2, (int)zombies[z].getY() - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
+    }
+  }
+  
+  /* This method calculates the best move for the chaser by calculating its four hypothetical moves (top, bottom, left, or right) and, then, checking which out of the
+   * four moves is the closest to the runner. The closest move returns an integer that is passed to the movePlayers() method.
+   * Note: calculations are done from the center(s) of the runner and chaser */
+  public static int bestMoveChaser(Point runner, Point chaser, char keyInput, int boxSize, int moveSize) {
+    double chaseLeft = distance(runner, chaser, -moveSize, 0);
+    double chaseRight = distance(runner, chaser, moveSize, 0);
+    double chaseTop = distance(runner, chaser, 0, -moveSize);
+    double chaseBottom = distance(runner, chaser, 0, moveSize);
+    
+    if(chaseLeft <= chaseRight && chaseLeft <= chaseTop && chaseLeft <= chaseBottom) {
+      return 0;
+    }else if(chaseRight <= chaseLeft && chaseRight <= chaseTop && chaseRight <= chaseBottom) {
+      return 2;
+    }else if(chaseTop <= chaseLeft && chaseTop <= chaseRight && chaseTop <= chaseBottom) {
+      return 1;
+    } else{
+      return 3;
+    }
+  }
+  
+  //this method moves the runner, chaser, and zombies while processing runner key input and whether moves are legal
+  public static void movePlayers(Point runner, Point chaser,
+                                 Point[] zombies, boolean[] deadZombies,
+                                 char keyInput, int boxSize, int moveSize, Graphics g) {
+    
+    boolean  chaserLegalCheck = legal(chaser, moveSize, moveSize, boxSize);
+    
+    //move alive zombies
+    moveZombies(zombies, deadZombies, boxSize, moveSize, g);
+    
+    //move runner
+    processKeyInput(runner, keyInput, boxSize, moveSize);
+    
+    //move chaser by calculating the best chase direction from the moveChaser method
+    int chaseDirection = moveChaser(runner, chaser, zombies, boxSize, moveSize);
+    
+    /* short-circuit, if legal move checks are false control statements go to last 
+     condition of no movment, i.e. translate(0, 0) */
+    if(chaserLegalCheck && chaseDirection == 0) {
+      chaser.translate(-(moveSize-1),0);//left
+    }else if (chaserLegalCheck && chaseDirection == 1  ) {
+      chaser.translate(0,-(moveSize - 1));//chase up
+    }else if (chaserLegalCheck && chaseDirection == 2 ) {
+      chaser.translate((moveSize - 1), 0);//chase right
+    }else if (chaserLegalCheck && chaseDirection == 3) {
+      chaser.translate(0,(moveSize - 1));//chase down
+    }else {
+      chaser.translate(0, 0); //else: do nothing
+    }
+  }
+  
+  /* this method checks whether a point has made a legal move by staying within the game's boundaries 
+   * note: boxSize is the white space within the black and white strips that serve as the game's border*/
+  public static boolean legal(Point p, int dx, int dy, int boxSize) {
+    return p.getX() + dx + PLAYER_SIZE / 2 < boxSize
+      && p.getX() + dx - PLAYER_SIZE / 2 > 20
+      && p.getY() + dy + PLAYER_SIZE / 2 < boxSize
+      && p.getY() + dy - PLAYER_SIZE / 2 > 20;
+  }
+  
+  //this method calculates the distance between two points
+  public static double distance(Point p1, Point p2) {
+    return Math.sqrt( (p1.getX()- p2.getX()) * (p1.getX() - p2.getX())
+                       + (p1.getY() - p2.getY()) * (p1.getY() - p2.getY()) );
+  }
+  
+  /* Treat p2's (chaser) dx and dy moves as a potential move from which this method then calculates 
+  the distance between p2 and p1. this calcultion is used in the bestMoveChaser() method*/
+  public static double distance(Point p1, Point p2, int dx, int dy) {
+    return Math.sqrt( (p1.getX()- p2.getX() - dx) * (p1.getX() - p2.getX() - dx)
+                       + (p1.getY() - p2.getY() - dy) * (p1.getY() - p2.getY() - dy) );
+  } 
+  //this method displays the zombie as white only after it is dead
+  public static void displayDeadZombieWhite(Graphics g, Point z){
+    g.setColor(Color.WHITE);
+    g.fillRect((int)z.getX() - PLAYER_SIZE / 2, (int)z.getY() - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE);
+  }
+  
+  //this method moves the zombies for game play
+  public static void moveZombies(Point[] zombies, boolean[] deadZombies, int boxSize, int moveSize, Graphics g) {
+    int[] dxs = { 0, 0, moveSize, -moveSize };
+    int[] dys = { moveSize, -moveSize, 0, 0 };
+    Random random = new Random();
+    for(int z = 0; z < zombies.length; z++){
+      if (deadZombies[z] == false) {
+        int di = random.nextInt(4);
+        int dx = dxs[di];
+        int dy = dys[di];
+        if (legal(zombies[z], dx, dy, boxSize)) {
+          zombies[z].translate(dx, dy);
+        }
+      }
+    }//end for loop
+    
+  }
+  
+  //this method moves the chaser by finding the best direction to catch the runner
+  public static int moveChaser(Point runner, Point chaser, Point[] zombies, 
+                               int boxSize, int moveSize) {
+    double distLeft =  Math.sqrt(Math.pow(Math.abs((chaser.getY()+5)-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5-(moveSize-1))-(runner.getX()+5)),2));
+    double distRight = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5)-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5+(moveSize-1))-(runner.getX()+5)),2));
+    double distTop = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5-(moveSize-1))-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5)-(runner.getX()+5)),2));
+    double distBottom = Math.sqrt(Math.pow(Math.abs((chaser.getY()+5+(moveSize-1))-(runner.getY()+5)),2) +  Math.pow(Math.abs((chaser.getX()+5)-(runner.getX()+5)),2));
+    if(distLeft <= distRight && distLeft <= distTop && distLeft <= distBottom) {
+      return 0;
+    }else if(distRight <= distLeft && distRight <= distTop && distRight <= distBottom) {
+      return 2;
+    }else if(distTop <= distLeft && distTop <= distRight && distTop <= distBottom) {
+      return 1;
+    } else{
+      return 3;
+    }
+  }
+  
+  //this method processes key input for the movement of the runner AND whether the move is legal
+  public static void processKeyInput(Point runner, char keyInput, int boxSize, int moveSize) {
+    int[] dxs = { 0, 0, moveSize, -moveSize };
+    int[] dys = { moveSize, -moveSize, 0, 0 };
+    char[] keys = { 's', 'w', 'd', 'a' };
+    
+    for (int i = 0; i < dxs.length; i++) {
+      int dx = dxs[i];
+      int dy = dys[i];
+      char key = keys[i];
+      if (keyInput == key && legal(runner, dx, dy, boxSize)) {
+        runner.translate(dx, dy);
+      }
+    }
+  }
+  
+  //this method tests whether a collision has occured between the runner and chaser
+  public static boolean collision(Point runner, Point chaser) {
+    return Math.max( Math.abs(runner.getX() - chaser.getX()),
+                    Math.abs(runner.getY() - chaser.getY())) <= PLAYER_SIZE;
+  }
+  
+  //this method adds animation for the death of the runner after a collision with a zombie
+  public static void runnerDies(Point runner, DrawingPanel panel, Graphics g, int boxSize) {
+    double x = runner.getX();
+    double y = runner.getY();
+    
+    g.setColor(Color.WHITE);
+    g.drawRect((int)x - PLAYER_SIZE/2, (int)y - PLAYER_SIZE/2, PLAYER_SIZE, PLAYER_SIZE);
+    int delta = -1;
+    int shrink = 20;
+    
+    for(int j = 1; j <= 10; j++) {
+      shrink = shrink-j;
+      
+      panel.sleep(100);
+      g.setColor(Color.WHITE);
+      g.drawString("AAAAARGGH", boxSize/2 - PLAYER_SIZE/2,boxSize/4 - PLAYER_SIZE/2);
+      g.setColor(Color.WHITE);
+      g.fillRect(boxSize/2 - PLAYER_SIZE/2, boxSize/4 - PLAYER_SIZE/2,shrink,shrink);
+      
+      panel.sleep(100);
+      g.setColor(Color.GREEN);
+      g.fillRect(boxSize/2 - PLAYER_SIZE/2, boxSize/4 - PLAYER_SIZE/2,shrink,shrink);
+      g.setColor(Color.RED);
+      g.drawString("AAAAARGGH", boxSize/2 - PLAYER_SIZE/2,boxSize/4 - PLAYER_SIZE/2);
+      
+      panel.sleep(100);
+      g.setColor(Color.WHITE);
+      g.drawString("AAAAARGGH", boxSize/2 - PLAYER_SIZE/2,boxSize/4 - PLAYER_SIZE/2);
+      g.setColor(Color.WHITE);
+      g.fillRect(boxSize/2 - PLAYER_SIZE/2, boxSize/4 - PLAYER_SIZE/2,shrink,shrink);
+    }
+  }
+}

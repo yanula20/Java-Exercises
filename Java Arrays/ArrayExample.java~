@@ -1,0 +1,25 @@
+import java.util.*;
+public class ArrayExample {
+  public static void main(String[] args) {
+    int[] array1 = {1,2,3};
+    int[] array2 = {3,4};
+    int[] array3 = array1;
+    int[] array4 = array2;
+    System.out.println(Arrays.toString(array1)+Arrays.toString(array2));
+    array3[0] = 5;
+    array4[1] = 7;
+    System.out.println(Arrays.toString(array1)+Arrays.toString(array2));
+    array1 = array4;
+    System.out.println(Arrays.toString(array1)+Arrays.toString(array2));
+  }
+}
+/* 
+ * How many integer array variables does this program have?
+ * How many integer array objects does this program have?
+ * What is printed by this program?
+ * After the first line is printed, how many arrays can this program access?
+ * After the last line is printed, how many arrays can this program access?
+ * Suppose we add the line:
+   array3 = array1;
+ * at the end of the program. How many arrays can this program now access?
+*/

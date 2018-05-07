@@ -1,0 +1,31 @@
+import java.util.*;
+
+public class SwitchCases {
+  public static final Scanner CONSOLE = new Scanner(System.in);
+  public static void main(String[] args) {
+    getUserInput();
+  }
+  
+  public static void getUserInput() {
+    System.out.print("Enter a line of text: ");
+    String str = CONSOLE.nextLine( );
+    System.out.println();
+    String result = swapCases(str);
+    System.out.println(result);
+  }
+  
+  public static String swapCases(String str) {
+    String result = "";
+    for (int i = 0; i < str.length( ); i++) {
+      char c = str.charAt(i);
+      if (c != str.charAt(i).toUpperCase()) {
+        result = result + c.toUpperCase();
+      } else if (c != str.charAt(i).toLowerCase()){
+        result = result + c.toLowerCase();
+      }
+      return result;
+    }
+  }
+  
+  
+  

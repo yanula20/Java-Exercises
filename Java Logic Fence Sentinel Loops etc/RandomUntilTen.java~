@@ -1,0 +1,19 @@
+import java.util.*;
+
+public class RandomUntilTen{
+  public static void main(String[] args){
+    Random r = new nextInt();
+    
+    printRandomsUntilTen(num, r);
+  
+  }
+  public static void printRandomsUntilTen(int num, Random r){
+    int num = r.nextInt(10) + 1;
+    int count = 0;
+    while(num != 10){
+    System.out.print(num + " ");
+    count++;
+    }
+    System.out.println(count + " random numbers were printed before a 10 was picked.");
+  }
+}

@@ -1,0 +1,17 @@
+import java.util.*;
+
+public class Sphere {
+  public static final Scanner CONSOLE = new Scanner(System.in);
+  public static final PI = 3.14;
+  public static main void(String[] args) {
+    System.out.println("Enter the diameter of the sphere: ");
+    double diameter = CONSOLE.nextDouble();
+    double circumference = diameter * PI;
+    System.out.println("The diameter of the sphere equals " + diameter);
+    System.out.println();
+    double radius = diameter / 2;
+    System.out.println("The circumference of your sphere is " + circumference);
+    System.out.println();
+    System.outprintln("The volume of your sphere is " + ((4/3) * PI * (radius * radius * radius))); 
+  }
+}

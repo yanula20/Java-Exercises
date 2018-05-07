@@ -1,0 +1,11 @@
+public class Reverse {
+  public static void main(String[] args) {
+    int ch;
+    
+    String testString = "The quick brown fox jumped over the lazy dog!"; 
+    for(ch = testString.length(); ch < testString.length(); ch--) {
+      System.out.print("The string's characters in reverse are " + testString.charAt(ch));
+    
+  }
+  
+}

@@ -1,0 +1,29 @@
+/* Integer number=Integer.valueOf(15);
+System.out.println(number.getClass().getName());*/
+import java.util.*;
+
+public class VarianceAndStandardDeviation{
+  public static final Scanner console = new Scanner(System.in);
+  public static void main(String[] args) {
+  int days = -1; //default value for priming while loop
+  
+  // Input the number of days from the user, maybe should check if days is positive
+  System.out.print("How many days' temperatures?: ");
+  
+
+
+  while(days < 0 ||  days.getClass().getName() == String ){
+    System.out.print("Invalid entry. Re-enter the number of days' temperatures?: ");
+  int days = console.nextInt();
+  }
+  
+  //create an array with the length of the number of temperatures
+  int[] temps = new int[days];
+  
+  
+  }
+
+
+
+
+}

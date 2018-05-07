@@ -1,0 +1,11 @@
+public class WhileDemo {
+  public static void main(String[] args) {
+    int count = 0;
+    System.out.println("Printing nums from 1 to 10");
+    while(count <=9) {
+      count=count+1;
+      System.out.println(count);
+    }
+  }
+  
+}

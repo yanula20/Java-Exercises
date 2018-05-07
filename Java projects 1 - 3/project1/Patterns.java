@@ -1,0 +1,123 @@
+/* This program contains two methods. The FIRST METHOD prints a triangle pattern. The method 
+ * call asks a user for the width of the pattern, and then prints the corresponding pattern.
+ * The SECOND METHOD prints a sequence of text boxes. This method asks the user to enter the number of
+ * boxes, number of rows, and number of columns and then prints that many text boxes 
+ * horizontally, each box with the specified numbers of rows and columns.
+ */
+
+//java utility for Scanner object to take user input
+import java.util.*;
+
+//Patterns.java program
+public class Patterns {
+  
+  //class constant for CONSOLE, takes user input 
+  public static final Scanner CONSOLE = new Scanner(System.in);
+  
+  //program's main method
+  public static void main(String[] args) {
+    System.out.println("Project 1 written by Donald Moore, UTSAID: qxv177");
+    
+    //method call to draw triangle pattern based on user input: width
+    drawPattern();
+    
+    //spacing between Triangle pattern and Box patterns
+    System.out.print("\n");
+    
+    /*method call to draw boxes based on user input: number of boxes 
+     * number of rows, and number of columns
+     */
+    drawBoxes();
+  }
+  
+  //method takes user input of width to draw triangle pattern
+  public static void drawPattern() {
+    int cols;
+    int rows;
+    
+    //request user input for triangle width and store in variable 'width'
+    System.out.print("Enter width of pattern: ");
+    int width = CONSOLE.nextInt();
+    int height = width / 2;
+    /* drawPattern() uses 'bars' variable for a modulus calculation to determine whether pattern
+    * will have a vertical bar '|' in its center. Vertical bars are drawn only for odd widths:
+    * width % 2 == 1. Conversely, even widths, i.e. width % 2 == 0, means no vertical bars 
+    * in pattern.
+    */
+    int bars = width % 2;
+    
+    //all rows from 1 to the pattern height = width/2
+    for(rows = 1; rows <= height; rows++) {
+      
+      /* Print spaces in columns by printing 'height - rows' number of spaces
+      each 'rows' from outside loop */
+      for(cols = 1; cols <= height - rows; cols++) {
+        System.out.print(" ");
+      }
+      //number of patterns drawn in column is equal to the current row
+      for(cols = 1; cols <= rows; cols++) {
+        System.out.print("/");
+      }
+      //only patterns with an odd width will print a vertical bar
+      if(bars == 1) {
+        System.out.print("|");
+      }
+      //number of patterns drawn in column is equal to the current row
+      for(cols = 1; cols <= rows; cols++) {
+        System.out.print("\\");
+      } System.out.print("\n"); //end of each row
+    }//end of all rows
+  }//end drawPattern() method
+  
+  //method to draw boxes via user input: number of boxes, cols, rows
+  public static void drawBoxes() {
+    int row;
+    int col;
+    int box;
+    //take user input number of boxes, store in numBoxes variable
+    System.out.print("Enter number of boxes: ");
+    int numBoxes = CONSOLE.nextInt();
+    
+    //take user input number of rows, store in numRows variable
+    System.out.print("Enter number of rows: ");
+    int numRows = CONSOLE.nextInt();
+    
+    //take user input number of columns, store in numCols variable
+    System.out.print("Enter number of columns: ");
+    int numCols = CONSOLE.nextInt(); 
+    
+    //print box tops based on number of boxes and columns
+    for(box = 1; box <= numBoxes; box++) {
+      System.out.print("+");
+      for(col = 2; col <= numCols - 1; col++) {
+        System.out.print("-");
+      }
+      System.out.print("+  ");
+    }System.out.print("\n"); //end of all three box tops
+     
+    /* Note: print box sides, row starts at 2 b/c box top occupies row 1.
+    * rows end at numRows - 1 b/c box bottom occupies last row.
+    * Note: column spaces, " ", start at 2 and end at numCols-1 b/c "|" occupies first
+    * and last position in each row.*/
+    for(row = 2; row <= numRows - 1; row++) {
+      for(box = 1; box <= numBoxes; box++) {
+        System.out.print("|");
+        for(col = 2; col <= numCols - 1; col++) {
+          System.out.print(" ");
+        }
+        System.out.print("|  "); 
+      }System.out.print("\n");  //end of EACH SIDE row for all boxes
+    }// end of ALL SIDE rows for all boxes (i.e., MINUS box top row and box bottom row)
+    
+    //print box bottoms
+    for(box = 1; box <= numBoxes; box++) { 
+      System.out.print("+");
+      for(col = 2; col <= numCols - 1; col++) {
+        System.out.print("-");
+      }
+      System.out.print("+  ");
+    }System.out.print("\n"); //end of all box bottoms
+  }//end drawBoxes method()
+}
+
+

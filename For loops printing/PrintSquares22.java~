@@ -1,0 +1,19 @@
+public class PrintSquares22 {
+  //class constant for the user input console
+  public static final Scanner CONSOLE = new Scanner(System.in);
+  
+  //main method
+  public static void main(String[] args) {
+    
+    //Request user input for the start of the square range
+    System.out.print("Enter a start number for the SQUARES RANGE: ");
+    int squareStart = CONSOLE.nextInt();
+    
+    System.out.print("Enter an end range for the SQUARES RANGE: ");
+    int squareEnd = CONSOLE.next();
+  
+    for (count = squareStart; count <= squareEnd; count++) {
+      System.out.println("The square root of " + count + " is equal to " + count * count);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+/* This program uses the java DrawPanel (512 x 512) to create two hyperbolas.
+  The hyperbola in the lower left-hand corner has grid lines separated by 32 
+  pixels, and the hyperbola in the upper right-hand corner has grid 
+  lines separated by 8 pixels.
+  */
+
+import java.awt.*;
+
+public class Hyperbola {
+  
+  // The width and height of the DrawingPanel.
+  public static final int PANEL_SIZE = 512;
+  
+  // Right now this draws an X, but should draw two hyperbolas.
+  public static void main(String[] args) {
+    System.out.println("Lab 4 written by Donald A. Moore, UTSAID: qxv177");
+    
+    //declare integer i, for the two 'for loop'
+    int i;
+    DrawingPanel panel = new DrawingPanel(PANEL_SIZE, PANEL_SIZE);
+    Graphics g = panel.getGraphics();
+    
+    //for loop draws the lower-left hyperbola in the DrawPanel
+    for(i = 0; i <= PANEL_SIZE; i+=32) {
+      g.drawLine(0, i, i, PANEL_SIZE);
+    }
+    
+    //for loop draws the upper-right hyperbola in the DrawPanel
+    for(i = 0; i <= PANEL_SIZE; i+=8) {
+      g.drawLine(i, 0, PANEL_SIZE, i);
+    }
+  }
+}
